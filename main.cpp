@@ -1,18 +1,21 @@
-#include <iostream>
+
+#include <bits/stdc++.h>
 
 using namespace std;
 
-#define NC "\e[0m"
-#define RED "\e[0;31m"
-#define GRN "\e[0;32m"
-#define CYN "\e[0;36m"
-#define REDB "\e[41m"
+
 
 struct Process{
 
     int id,bt,pr,wt;
 
 };
+
+bool comp (Process a, Process b)
+{
+    return a.pr < b.pr;
+}
+
 
 void getWaitingTime ( struct Process arr[], int sz ) // to calculate waiting time to each process
 {
@@ -21,7 +24,7 @@ void getWaitingTime ( struct Process arr[], int sz ) // to calculate waiting tim
   int t =0;
   for (int i=1 ; i<sz ; ++i)
   {
-      t+=arr[i-1].pr;
+      t+=arr[i-1].bt;
       arr[i].wt = t;
 
   }
@@ -34,6 +37,20 @@ void getWaitingTime ( struct Process arr[], int sz ) // to calculate waiting tim
 1 3 10
 3 4 2
 4 5 1 */
+
+void input(Process arr[], int num){
+
+
+   // arr = new Process [num];
+    cout<<"Processes\t Burst time \t Priority\n";
+    for (int i = 0; i < num; ++i) {
+        cout<<"P"<<i+1;
+        arr[i].id=i+1;
+        cin>>arr[i].bt>>arr[i].pr;
+
+    }
+    cout<<"----------------------------------------------------------------------\n";
+}
 
 
 void output (struct Process arr[], int sz )
@@ -56,13 +73,20 @@ for (int i=0 ; i<80 ; ++i) cout << "*";
 
 int main()
 {
-     Process arr[5];
-     for (int i=0 ; i<5 ; ++i)
-     {
-         cin >> arr[i].id >> arr[i].bt >> arr[i].pr;
-     }
-     getWaitingTime ( arr, 5 );
+        int nums;
+    cout<<"Enter number of Processes: ";
+    cin>>nums;
 
-     output(arr, 5);
-    return 0;
+    Process arr[5];
+
+       input(arr , nums);
+        sort (arr, arr+nums, comp );
+    // priority(arr,nums);
+     cout << "fff";
+     getWaitingTime(arr, nums);
+     output(arr, nums);
+
+
+return 0;
 }
+
