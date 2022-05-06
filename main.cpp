@@ -1,5 +1,6 @@
 
 #include <bits/stdc++.h>
+#include <windows.h>
 
 using namespace std;
 
@@ -7,7 +8,7 @@ using namespace std;
 
 struct Process{
 
-    int id,bt,pr,wt;
+    int id,bt,pr,wt, en;
 
 };
 
@@ -21,35 +22,33 @@ void getWaitingTime ( struct Process arr[], int sz ) // to calculate waiting tim
 {
 
   arr[0].wt = 0;
+  arr[0].en = arr[0].pr;
   int t =0;
   for (int i=1 ; i<sz ; ++i)
   {
       t+=arr[i-1].bt;
       arr[i].wt = t;
+      arr[i].en = arr[i].wt + arr[i].bt;
 
   }
 
 
 }
-/*
-2 1 1
-5 2 5
-1 3 10
-3 4 2
-4 5 1 */
+
 
 void input(Process arr[], int num){
 
-
-   // arr = new Process [num];
-    cout<<"Processes\t Burst time \t Priority\n";
     for (int i = 0; i < num; ++i) {
-        cout<<"P"<<i+1;
-        arr[i].id=i+1;
-        cin>>arr[i].bt>>arr[i].pr;
+        cout<<"(P"<<i+1<<")" << endl;
+         arr[i].id=i+1;
+        cout << " Burst time = ";
+        cin>>arr[i].bt;
+        cout <<  " Priority = ";
+        cin >>arr[i].pr;
+        cout << endl;
 
     }
-    cout<<"----------------------------------------------------------------------\n";
+
 }
 
 
@@ -58,33 +57,98 @@ void output (struct Process arr[], int sz )
    for (int i=0 ; i<80 ; ++i) cout << "*";
    cout << endl << "\a";
 
+     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
    cout << "|     Process\t   Burst Time\tPriority Time\tWaiting Time \t\t       |"<<endl;
 
    for (int i=0 ; i<sz ; ++i)
    {
-       cout << "|       P" << arr[i].id << "\t\t"<<arr[i].bt << "\t\t"<< arr[i].pr <<"\t\t" << arr[i].wt  << "\t\t       |"<< endl;
+          SetConsoleTextAttribute(hConsole, i+2);
+
+       cout  <<"|       P" << arr[i].id << "\t\t"<<arr[i].bt << "\t\t"<< arr[i].pr <<"\t\t" << arr[i].wt  << "\t\t       |"<< endl;
    }
 
+   SetConsoleTextAttribute(hConsole, 15 );
+
 for (int i=0 ; i<80 ; ++i) cout << "*";
-   cout << endl;
+   cout << endl << endl;
+
+
+   // ----------- Gantt Chart ------------ //
+
+cout << "Gantt Chart" << endl;
+
+cout << endl;
+
+for (int i=0 ; i<sz ; ++i)
+{
+
+     SetConsoleTextAttribute(hConsole, (i+3)*15 +(i+1) );
+    for (int j=0 ; j<arr[i].bt*3 ; ++j)
+    {
+
+        if (j == arr[i].bt) cout << "p" << arr[i].id;
+        else
+            cout << " ";
+    }
+
+}
+SetConsoleTextAttribute(hConsole,15 );
+cout << endl<< 0;
+for (int i=0 ; i<sz ; ++i)
+{
+    int deg=0, t=arr[i+1].wt;
+    while (t>0)
+    {
+        deg++;
+        t/=10;
+    }
+
+    for (int j=0 ; j<arr[i].bt *3- deg/2 ; ++j) cout << " ";
+    cout << arr[i].en;
+}
+cout << endl<< endl ;
+
+//   ----- Calculate Average Time -----   //
+cout <<" Average Time " <<endl << endl;
+double sum =0;
+cout << "   ";
+for (int i=0 ; i<sz ; ++i)
+{
+    sum += arr[i].wt;
+    cout << " "<< arr[i].wt;
+    if (i!=sz-1) cout << " +";
+}
+cout << endl << " ";
+for (int i=0; i<sz*3+5 ; ++i) cout << '_';
+
+cout  <<  "  = " << sum / sz <<endl;
+
+for (int i=0 ; i<sz*1.5 ; ++i) cout<< " ";
+cout << sz << endl << endl;
+
+
+
 
 }
 
 
 int main()
 {
+    Process *arr;
         int nums;
-    cout<<"Enter number of Processes: ";
+    cout<<"Enter number of Processes:  ";
     cin>>nums;
 
-    Process arr[5];
+
+   arr=new Process[nums];
 
        input(arr , nums);
         sort (arr, arr+nums, comp );
-    // priority(arr,nums);
-     cout << "fff";
      getWaitingTime(arr, nums);
      output(arr, nums);
+
+     delete []arr;
 
 
 return 0;
