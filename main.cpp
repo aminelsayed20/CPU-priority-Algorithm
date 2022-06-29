@@ -80,6 +80,7 @@ cout << "Gantt Chart" << endl;
 
 cout << endl;
 
+
 for (int i=0 ; i<sz ; ++i)
 {
 
@@ -120,11 +121,11 @@ for (int i=0 ; i<sz ; ++i)
     if (i!=sz-1) cout << " +";
 }
 cout << endl << " ";
-for (int i=0; i<sz*3+5 ; ++i) cout << '_';
+for (int i=0; i<sz*4   ; ++i) cout << '_';
 
 cout  <<  "  = " << sum / sz <<endl;
 
-for (int i=0 ; i<sz*1.5 ; ++i) cout<< " ";
+for (int i=0 ; i<sz*1.7 ; ++i) cout<< " ";
 cout << sz << endl << endl;
 
 
@@ -154,3 +155,16 @@ int main()
 return 0;
 }
 
+/*
+Example 1:
+10
+3
+1
+1
+2
+4
+1
+5
+5
+2
+*/
